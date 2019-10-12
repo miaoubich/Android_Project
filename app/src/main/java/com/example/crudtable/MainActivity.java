@@ -6,12 +6,16 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -76,6 +80,17 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode == REQUEST_CODE_GALLERY && requestCode == RESULT_OK){
+            Uri imageUri = data.getData();
+            CropImage.activity(imageUri)
+                    .setGuidelines(CropImageView.Guidelines.ON) //enable image guideline
+            .setAspectRatio(1,1) // image will be a square
+            .start(this);
+
+        }
     }
 
 }
