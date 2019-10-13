@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         mEdtPhone = findViewById(R.id.edtPhone);
         mBtnAdd = findViewById(R.id.btnAdd);
         mBtnList = findViewById(R.id.btnList);
+        mImageView = findViewById(R.id.imageView);
 
         //select image by imageview click
         mImageView.setOnClickListener(new View.OnClickListener(){
@@ -82,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode,permissions,grantResults);
     }
 
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode == REQUEST_CODE_GALLERY && requestCode == RESULT_OK){
             Uri imageUri = data.getData();
@@ -89,8 +91,23 @@ public class MainActivity extends AppCompatActivity {
                     .setGuidelines(CropImageView.Guidelines.ON) //enable image guideline
             .setAspectRatio(1,1) // image will be a square
             .start(this);
-
+        }
+        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if(requestCode == RESULT_OK){
+                Uri resultUri = result.getUri();
+                //set image cheesed from gallery to image view
+                mImageView.setImageURI(resultUri);
+            }else if(resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
+                 Exception error = result.getError();
+            }
+            super.onActivityResult(requestCode,resultCode,data);
         }
     }
 
 }
+
+/*Installing libraries required for our project
+* Designing the main screen to input image and text information
+* Add croping activity in manifest
+* */
