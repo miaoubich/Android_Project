@@ -6,8 +6,10 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +18,8 @@ import android.widget.Toast;
 
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         mImageView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                //read external storage permission to select image from gallery
+                //read external  storage permission to select image from gallery
                 //runtime permission for devices android 6.0 and up
                 ActivityCompat.requestPermissions(
                         MainActivity.this,
@@ -73,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 //gallery intent
                 Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                galleryIntent.setType("image/*");
+                 galleryIntent.setType("image/*");
                 startActivityForResult(galleryIntent, REQUEST_CODE_GALLERY);
             }else{
                 Toast.makeText(this, "You Don´t have permission to access this file", Toast.LENGTH_SHORT).show();
@@ -98,6 +102,13 @@ public class MainActivity extends AppCompatActivity {
                 Uri resultUri = result.getUri();
                 //set image cheesed from gallery to image view
                 mImageView.setImageURI(resultUri);
+                //using bitmap
+               /* try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), resultUri);
+                    mImageView.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }*/
             }else if(resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
                  Exception error = result.getError();
             }
@@ -110,4 +121,5 @@ public class MainActivity extends AppCompatActivity {
 /*Installing libraries required for our project
 * Designing the main screen to input image and text information
 * Add croping activity in manifest
+* in drawable shouldnt contains capital letters
 * */
