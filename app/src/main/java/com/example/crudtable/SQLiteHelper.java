@@ -31,7 +31,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         this.image = image;
         SQLiteDatabase database = getWritableDatabase();
         //query to insert data in database
-        String sql = "INSERT INTO RECORS VALUES(NULL, ?, ?, ?, ?)"; //where 'RECORD' is the table name, it will be created in mainActivity
+        String sql = "INSERT INTO RECORD VALUES(NULL, ?, ?, ?, ?)"; //where 'RECORD' is the table name, it will be created in mainActivity
 
         SQLiteStatement statement = database.compileStatement(sql);
         statement.clearBindings();
@@ -40,8 +40,19 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         statement.bindString(2,age);
         statement.bindString(3,phone);
         statement.bindBlob(4, image);
+        statement.bindDouble(5, (double)id);
 
         statement.executeInsert();
+    }
+
+    //update data
+    Override
+    public void updateData(String name, String age, String phone, byte[] image, int id){
+        SQLiteDatabase database = getWritableDatabase();
+        //query to update records
+        String sql = "UPDATE RECORD SET name=?, age=?, photo=?, image=? WHERE id=?";
+
+        SQLiteStatement statement = database.compileStatement(sql);
     }
 
     @Override
