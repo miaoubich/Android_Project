@@ -1,5 +1,6 @@
 package com.example.crudtable;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,8 +16,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     private byte[] image;
     private double id;
 
-    public SQLiteHelper(@Nullable Context context, @Nullable String name,
-                        @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+    public SQLiteHelper(@Nullable Context context,
+                        @Nullable String name,
+                        @Nullable SQLiteDatabase.CursorFactory factory,
+                        int version) {
         super(context, name, factory, version);
     }
 
@@ -27,10 +30,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     //insert data
     public void insertData(String name, String age, String phone, byte[] image){
-        this.name = name;
-        this.age = age;
-        this.phone = phone;
-        this.image = image;
         SQLiteDatabase database = getWritableDatabase();
         //query to insert data in database
         String sql = "INSERT INTO RECORD VALUES(NULL, ?, ?, ?, ?)"; //where 'RECORD' is the table name, it will be created in mainActivity
@@ -42,7 +41,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         statement.bindString(2,age);
         statement.bindString(3,phone);
         statement.bindBlob(4, image);
-        statement.bindDouble(5, (double)id);
 
         statement.executeInsert();
     }
@@ -59,7 +57,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         statement.bindString(2,age);
         statement.bindString(3,phone);
         statement.bindBlob(4, image);
-        statement.bindDouble(5, id);
+        statement.bindDouble(5, (double)id);
 
         statement.execute();
         database.close();

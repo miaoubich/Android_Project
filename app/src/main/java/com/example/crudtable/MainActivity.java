@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 catch(Exception e){
                     e.printStackTrace();
+                    Toast.makeText(MainActivity.this, "Failed To insert data", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -117,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private static byte[] imageViewToByte(ImageView image) {
+    public static byte[] imageViewToByte(ImageView image) {
         Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
