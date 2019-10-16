@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         mBtnList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(new Intent(MainActivity.this, RecordListActivity.class));
             }
         });
     }
@@ -171,4 +171,5 @@ public class MainActivity extends AppCompatActivity {
 * Add croping activity in manifest
 * in drawable shouldnt contains capital letters
 * create SQLiteHelper class to create database, table etc...
+* Create new activity to display records in a table
 * */
