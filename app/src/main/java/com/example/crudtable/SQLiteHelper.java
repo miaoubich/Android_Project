@@ -24,7 +24,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     //insert data
-    public void insertData(String name, String age, String phone, byte[] image){
+    public void insertData(String name, String age, String phone, byte[] image, double id){
         this.name = name;
         this.age = age;
         this.phone = phone;
@@ -40,19 +40,41 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         statement.bindString(2,age);
         statement.bindString(3,phone);
         statement.bindBlob(4, image);
-        statement.bindDouble(5, (double)id);
+        statement.bindDouble(5, id);
 
         statement.executeInsert();
     }
 
     //update data
-    Override
     public void updateData(String name, String age, String phone, byte[] image, int id){
         SQLiteDatabase database = getWritableDatabase();
         //query to update records
         String sql = "UPDATE RECORD SET name=?, age=?, photo=?, image=? WHERE id=?";
 
         SQLiteStatement statement = database.compileStatement(sql);
+
+        statement.bindString(1,name);
+        statement.bindString(2,age);
+        statement.bindString(3,phone);
+        statement.bindBlob(4, image);
+        statement.bindDouble(5, id);
+
+        statement.execute();
+        database.close();
+    }
+
+    //delete Data
+    public void deleteData(int id){
+        SQLiteDatabase database = getWritableDatabase();
+        //query to delete record using id
+        String sql = "DELETE FROM RECORD WHERE id=?";
+
+        SQLiteStatement statement = database.compileStatement(sql);
+        statement.clearBindings();
+        statement.bindDouble(1, (double)id);
+
+        statement.execute();
+        database.close();
     }
 
     @Override
