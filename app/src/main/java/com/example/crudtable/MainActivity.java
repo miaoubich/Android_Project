@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     Button mBtnAdd, mBtnList;
     ImageView mImageView;
     final int REQUEST_CODE_GALLERY = 999;
+
+    public static SQLiteHelper mSQLiteHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,13 @@ public class MainActivity extends AppCompatActivity {
         mBtnAdd = findViewById(R.id.btnAdd);
         mBtnList = findViewById(R.id.btnList);
         mImageView = findViewById(R.id.imageView);
+
+        //creating database
+        mSQLiteHelper = new SQLiteHelper(this,"RECORDDB.sqlite", null, 1);
+
+        //creating table in database
+        mSQLiteHelper.queryData("CREATE TABLE IF NOT EXISTS RECORD(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR, age VARCHAR, phone VARCHAR, image BLOB)");
+
 
         //select image by imageview click
     /*    mImageView.setOnClickListener(new View.OnClickListener(){
@@ -77,7 +88,13 @@ public class MainActivity extends AppCompatActivity {
         mBtnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                try{
+                    mSQLiteHelper.insertData(
+                            mEdtName.getText().toString().trim(),
+                            mEdtAge.getText().toString().trim(),
+                            mEdtPhone.getText().toString().trim(),
+                            imageViewToByte(mImageView));
+                }
             }
         });
 
@@ -88,6 +105,14 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private static byte[] imageViewToByte(ImageView image) {
+        Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
     }
 
     @Override
