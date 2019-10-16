@@ -93,7 +93,17 @@ public class MainActivity extends AppCompatActivity {
                             mEdtName.getText().toString().trim(),
                             mEdtAge.getText().toString().trim(),
                             mEdtPhone.getText().toString().trim(),
-                            imageViewToByte(mImageView));
+                            imageViewToByte(mImageView)
+                    );
+                    Toast.makeText(MainActivity.this, "Data Added SUCCESS", Toast.LENGTH_SHORT).show();
+                    //reset viewer fields
+                    mEdtName.setText("");
+                    mEdtAge.setText("");
+                    mEdtPhone.setText("");
+                    mImageView.setImageResource(R.drawable.addphoto);
+                }
+                catch(Exception e){
+                    e.printStackTrace();
                 }
             }
         });
@@ -159,4 +169,5 @@ public class MainActivity extends AppCompatActivity {
 * Designing the main screen to input image and text information
 * Add croping activity in manifest
 * in drawable shouldnt contains capital letters
+* create SQLiteHelper class to create database, table etc...
 * */

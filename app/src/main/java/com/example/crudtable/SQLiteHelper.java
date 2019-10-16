@@ -13,6 +13,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     private String age;
     private String phone;
     private byte[] image;
+    private double id;
 
     public SQLiteHelper(@Nullable Context context, @Nullable String name,
                         @Nullable SQLiteDatabase.CursorFactory factory, int version) {
@@ -25,7 +26,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     //insert data
-    public void insertData(String name, String age, String phone, byte[] image, double id){
+    public void insertData(String name, String age, String phone, byte[] image){
         this.name = name;
         this.age = age;
         this.phone = phone;
@@ -41,7 +42,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         statement.bindString(2,age);
         statement.bindString(3,phone);
         statement.bindBlob(4, image);
-        statement.bindDouble(5, id);
+        statement.bindDouble(5, (double)id);
 
         statement.executeInsert();
     }
