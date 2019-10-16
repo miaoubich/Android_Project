@@ -7,6 +7,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -19,7 +20,9 @@ import android.widget.Toast;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         mImageView = findViewById(R.id.imageView);
 
         //select image by imageview click
-        mImageView.setOnClickListener(new View.OnClickListener(){
+    /*    mImageView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 //read external  storage permission to select image from gallery
@@ -53,19 +56,35 @@ public class MainActivity extends AppCompatActivity {
                 );
             }
         });
+        */
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //runtime permission for devices android 6.0 and up
+                ActivityCompat.requestPermissions(
+                        MainActivity.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        REQUEST_CODE_GALLERY
+                );
+                //read external  storage permission to select image from gallery
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, REQUEST_CODE_GALLERY);
+            }
+        });
 
         //add data to sqlite
-        mBtnAdd.setOnClickListener(new View.OnClickListener(){
+        mBtnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
 
             }
         });
 
         //display data list
-        mBtnList.setOnClickListener(new View.OnClickListener(){
+        mBtnList.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
 
             }
         });
@@ -73,50 +92,43 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if(requestCode == REQUEST_CODE_GALLERY){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == REQUEST_CODE_GALLERY) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //gallery intent
                 Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                 galleryIntent.setType("image/*");
+                galleryIntent.setType("image/*");
                 startActivityForResult(galleryIntent, REQUEST_CODE_GALLERY);
-            }else{
+            } else {
                 Toast.makeText(this, "You Don´t have permission to access this file", Toast.LENGTH_SHORT).show();
             }
             return;
         }
-        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        if(requestCode == REQUEST_CODE_GALLERY && requestCode == RESULT_OK){
-            Uri imageUri = data.getData();
-            CropImage.activity(imageUri)
-                    .setGuidelines(CropImageView.Guidelines.ON) //enable image guideline
-            .setAspectRatio(1,1) // image will be a square
-            .start(this);
-        }
-        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if(requestCode == RESULT_OK){
-                Uri resultUri = result.getUri();
-                //set image cheesed from gallery to image view
-                mImageView.setImageURI(resultUri);
-                //using bitmap
-               /* try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), resultUri);
-                    mImageView.setImageBitmap(bitmap);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }*/
-            }else if(resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
-                 Exception error = result.getError();
+@Override
+    protected void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+
+
+        if (resultCode == RESULT_OK) {
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                mImageView.setImageBitmap(selectedImage);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
             }
-            super.onActivityResult(requestCode,resultCode,data);
+
+        } else {
+            Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
         }
     }
 
 }
+
 
 /*Installing libraries required for our project
 * Designing the main screen to input image and text information
