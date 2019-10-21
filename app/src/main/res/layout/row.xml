@@ -31,6 +31,11 @@
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
             >
+
+            <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <!--  android:collapseColumns="0"  collapse the first column of the table row-->
             <TableRow>
                 <TextView
                     android:text="Name: "
@@ -79,6 +84,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </TableRow>
+            </TableLayout>
         </LinearLayout>
     </LinearLayout>
 
