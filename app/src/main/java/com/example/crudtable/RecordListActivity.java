@@ -21,4 +21,5 @@ public class RecordListActivity extends AppCompatActivity {
 /*
 * Design row for the listview
 * Create class model
+* Create custom adapter for listView
 * */
