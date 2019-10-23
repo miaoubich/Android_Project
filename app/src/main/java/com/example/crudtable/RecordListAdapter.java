@@ -1,6 +1,9 @@
 package com.example.crudtable;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +44,7 @@ public class RecordListAdapter extends BaseAdapter {
 
     private class ViewHolder{
         ImageView imageview;
-        TextView txtName, txtAge, TxtPhone;
+        TextView txtName, txtAge, txtPhone;
     }
 
     @Override
@@ -53,11 +56,23 @@ public class RecordListAdapter extends BaseAdapter {
             row = inflater.inflate(layout, null);
             holder.txtName = row.findViewById(R.id.txtName);
             holder.txtAge = row.findViewById(R.id.txtAge);
-            holder.TxtPhone = row.findViewById(R.id.txtPhone);
+            holder.txtPhone = row.findViewById(R.id.txtPhone);
             holder.imageview = row.findViewById(R.id.imgIcon);
-
+            row.setTag(holder);
+        }else{
+            holder = (ViewHolder)row.getTag();
         }
 
-        return null;
+        Model model = recordList.get(position);
+
+        holder.txtName.setText(model.getName());
+        holder.txtAge.setText(model.getAge());
+        holder.txtPhone.setText(model.getPhone());
+
+        byte[] recordImage = model.getImage();
+        Bitmap bitmap = BitmapFactory.decodeByteArray(recordImage, 0, recordImage.length);
+        holder.imageview.setImageBitmap(bitmap);
+
+        return row;
     }
 }
