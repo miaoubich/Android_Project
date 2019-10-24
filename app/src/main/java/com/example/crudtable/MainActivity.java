@@ -1,5 +1,6 @@
 package com.example.crudtable;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -39,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("New Record");
 
         mEdtName = findViewById(R.id.edtName);
         mEdtAge = findViewById(R.id.edtAge);
@@ -144,8 +148,6 @@ public class MainActivity extends AppCompatActivity {
 
 @Override
     protected void onActivityResult(int reqCode, int resultCode, Intent data) {
-        super.onActivityResult(reqCode, resultCode, data);
-
 
         if (resultCode == RESULT_OK) {
             try {
@@ -161,8 +163,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
         }
+        super.onActivityResult(reqCode, resultCode, data);
     }
-
 }
 
 
