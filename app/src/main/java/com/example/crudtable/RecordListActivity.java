@@ -2,7 +2,9 @@ package com.example.crudtable;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -107,7 +109,16 @@ public class RecordListActivity extends AppCompatActivity {
         dialog.show();
 
         //in update dialog click image view to update image
-
+        imageViewIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //check external storage permission
+                ActivityCompat.requestPermissions(
+                        RecordListActivity.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        999);
+            }
+        });
     }
 }
 
