@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -104,7 +105,8 @@ public class RecordListActivity extends AppCompatActivity {
                         }
                     }
                 });
-                return false;
+                dialog.show();
+                return true;
             }
         });
 
@@ -145,7 +147,7 @@ public class RecordListActivity extends AppCompatActivity {
         final EditText edtName = dialog.findViewById(R.id.edtName);
         final EditText edtAge = dialog.findViewById(R.id.edtAge);
         final EditText edtPhone = dialog.findViewById(R.id.edtPhone);
-        EditText btnUpdate = dialog.findViewById(R.id.btnUpdate);
+        Button btnUpdate = dialog.findViewById(R.id.btnUpdate);
 
         //set width of dialog
         int width = (int)(activity.getResources().getDisplayMetrics().widthPixels*0.95);
@@ -179,7 +181,7 @@ public class RecordListActivity extends AppCompatActivity {
                     dialog.dismiss();
                     Toast.makeText(getApplicationContext(),"Update is succeed!", Toast.LENGTH_SHORT).show();
                 } catch (Exception error) {
-                    Log.e("An Update error", error.getMessage());
+                    Log.e("Update failed", error.getMessage());
                 }
                 updateRecordList();
             }
@@ -229,8 +231,8 @@ public class RecordListActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int reqCode, int resultCode, Intent data) {
 
-        //if (resultCode == RESULT_OK)
-        if (resultCode == 888) {
+        if (resultCode == RESULT_OK){
+        //if (resultCode == 888) {
             try {
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getContentResolver().openInputStream(imageUri);
