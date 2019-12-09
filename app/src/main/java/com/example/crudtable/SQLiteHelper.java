@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -49,17 +50,18 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public void updateData(String name, String age, String phone, byte[] image, int id){
         SQLiteDatabase database = getWritableDatabase();
         //query to update records
-        String sql = "UPDATE RECORD SET name=?, age=?, photo=?, image=? WHERE id=?";
+        String sql = "UPDATE RECORD SET name=?, age=?, image=?, image=? WHERE id=?";
 
-        SQLiteStatement statement = database.compileStatement(sql);
+        SQLiteStatement updateStatement = database.compileStatement(sql);
 
-        statement.bindString(1,name);
-        statement.bindString(2,age);
-        statement.bindString(3,phone);
-        statement.bindBlob(4, image);
-        statement.bindDouble(5, (double)id);
+        updateStatement.bindString(1,name);
+        updateStatement.bindString(2,age);
+        updateStatement.bindString(3,phone);
+        updateStatement.bindBlob(4, image);
+        updateStatement.bindDouble(5, (double)id);
 
-        statement.execute();
+        //updateStatement.execute();
+        updateStatement.executeUpdateDelete();
         database.close();
     }
 

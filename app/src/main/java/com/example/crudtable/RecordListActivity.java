@@ -83,7 +83,7 @@ public class RecordListActivity extends AppCompatActivity {
                 dialog.setTitle("Choose an action");
                 dialog.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int i) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
                         if(i == 0){
                             //update
                             Cursor c = MainActivity.mSQLiteHelper.getData("SELECT id FROM RECORD");
@@ -159,12 +159,17 @@ public class RecordListActivity extends AppCompatActivity {
         //in update dialog click image view to update image
         imageViewIcon.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                //check external storage permission
+            public void onClick(View view) {
+                //runtime permission for devices android 6.0 and up
                 ActivityCompat.requestPermissions(
                         RecordListActivity.this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                        888);
+                        888
+                );
+                //read external  storage permission to select image from gallery
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, 888);
             }
         });
         btnUpdate.setOnClickListener(new View.OnClickListener(){
@@ -181,7 +186,8 @@ public class RecordListActivity extends AppCompatActivity {
                     dialog.dismiss();
                     Toast.makeText(getApplicationContext(),"Update is succeed!", Toast.LENGTH_SHORT).show();
                 } catch (Exception error) {
-                    Log.e("Update failed", error.getMessage());
+                    Toast.makeText(RecordListActivity.this, "Update Failed !", Toast.LENGTH_SHORT).show();
+                    //Log.e("Update failed", error.getMessage());
                 }
                 updateRecordList();
             }
@@ -214,7 +220,7 @@ public class RecordListActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == 888) {
+        if (requestCode == RESULT_OK) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //gallery intent
                 Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
