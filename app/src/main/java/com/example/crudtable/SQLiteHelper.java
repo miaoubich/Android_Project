@@ -11,11 +11,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
-    private String name;
-    private String age;
-    private String phone;
-    private byte[] image;
-    private double id;
 
     public SQLiteHelper(@Nullable Context context,
                         @Nullable String name,
@@ -50,7 +45,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public void updateData(String name, String age, String phone, byte[] image, int id){
         SQLiteDatabase database = getWritableDatabase();
         //query to update records
-        String sql = "UPDATE RECORD SET name=?, age=?, image=?, image=? WHERE id=?";
+        String sql = "UPDATE RECORD SET name=?, age=?, phone=?, image=? WHERE id=?";
 
         SQLiteStatement updateStatement = database.compileStatement(sql);
 

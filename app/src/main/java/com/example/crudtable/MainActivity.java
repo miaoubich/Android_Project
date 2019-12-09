@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     Button mBtnAdd, mBtnList;
     ImageView mImageView;
     final int REQUEST_CODE_GALLERY = 999;
+    public static final int PICK_IMAGE = 1;
 
     public static SQLiteHelper mSQLiteHelper;
 
@@ -84,7 +85,8 @@ public class MainActivity extends AppCompatActivity {
                 //read external  storage permission to select image from gallery
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, REQUEST_CODE_GALLERY);
+                //startActivityForResult(photoPickerIntent, REQUEST_CODE_GALLERY);
+                startActivityForResult(Intent.createChooser(photoPickerIntent, "Select Picture"), PICK_IMAGE);
             }
         });
 
