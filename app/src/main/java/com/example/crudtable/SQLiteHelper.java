@@ -55,7 +55,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         updateStatement.bindBlob(4, image);
         updateStatement.bindDouble(5, (double)id);
 
-        //updateStatement.execute();
         updateStatement.executeUpdateDelete();
         database.close();
     }

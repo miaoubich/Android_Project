@@ -149,6 +149,25 @@ public class RecordListActivity extends AppCompatActivity {
         final EditText edtPhone = dialog.findViewById(R.id.edtPhone);
         Button btnUpdate = dialog.findViewById(R.id.btnUpdate);
 
+        //get data of the clicked row from sqlite to be edited
+        Cursor cursor = MainActivity.mSQLiteHelper.getData("SELECT * FROM RECORD WHERE id=" + position);
+        mList.clear();
+        while(cursor.moveToNext()){
+            int id = cursor.getInt(0);
+            String name = cursor.getString(1);
+            edtName.setText(name);//set name in textBox
+            String age = cursor.getString(2);
+            edtAge.setText(age);//set age in textBox
+            String phone = cursor.getString(3);
+            edtPhone.setText(phone);//set phone in textBox
+            byte[] image = cursor.getBlob(4);
+            //set image in the edit frame
+            imageViewIcon.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
+
+            //add to list
+            mList.add(new Model(id, name, age, phone, image));
+        }
+
         //set width of dialog
         int width = (int)(activity.getResources().getDisplayMetrics().widthPixels*0.95);
         //set height of dialog
